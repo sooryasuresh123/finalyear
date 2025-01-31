@@ -5,12 +5,14 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 text-center">
             <h2>Welcome to Admission Management</h2>
-            <p>Manage departments, students, and faculty with ease.</p>
+            <p>Manage departments,programme and students.</p>
             
             <div class="d-grid gap-3">
                 <a href="{% url 'manage_department' %}" class="btn btn-primary">Manage Department</a>
-                <a href="#" class="btn btn-secondary">Manage Students</a>
-                <a href="#" class="btn btn-success">Manage Faculty</a>
+                <a href="{% url 'manage_program' %}" class="btn btn-primary">Manage Program</a>
+                <a href="{% url 'manage_student' %}" class="btn btn-primary">Manage Students</a>
+                <a href="#" class="btn btn-secondary">Manage Scholarships</a>
+                <!--<a href="#" class="btn btn-success">Manage Faculty</a>-->
             </div>
         </div>
     </div>
