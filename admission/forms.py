@@ -1,5 +1,5 @@
 from django import forms
-from .models import Department,Program,Student,Scholarship,TransferCertificate, Caste, Religion, Quota,ProgramLevel
+from .models import Department,Program,Student,Scholarship,TransferCertificate, Caste, Religion, Quota,ProgramLevel,StudentScholarship
 
 
 class DepartmentForm(forms.ModelForm):
@@ -57,6 +57,11 @@ class ScholarshipForm(forms.ModelForm):
         widgets = {
             'scholarship_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter scholarship name'}),
         }
+class StudentScholarshipForm(forms.ModelForm):
+    class Meta:
+        model = StudentScholarship
+        fields = ['student', 'scholarship', 'amount']
+
 class TransferCertificateForm(forms.ModelForm):
     class Meta:
         model = TransferCertificate

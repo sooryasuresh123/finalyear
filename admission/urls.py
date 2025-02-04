@@ -26,6 +26,7 @@ urlpatterns = [
     path('scholarships/edit/<int:pk>/', views.edit_scholarship, name='edit_scholarship'),  # Edit scholarship
     path('scholarships/delete/<int:pk>/', views.delete_scholarship, name='delete_scholarship'),  # Delete scholarship
     #path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('student_scholarships/add/', views.add_student_scholarship, name='add_student_scholarship'),
 
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', custom_login, name='login'),

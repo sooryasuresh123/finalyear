@@ -87,6 +87,13 @@ class Scholarship(models.Model):
 
     def __str__(self):
         return self.scholarship_name
+class StudentScholarship(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)  # Student Foreign Key
+    scholarship = models.ForeignKey(Scholarship, on_delete=models.CASCADE)  # Scholarship Foreign Key
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount Field
+
+    def __str__(self):
+        return f"{self.student.stud_name} - {self.scholarship.name}"
     
 class Reason(models.Model):
     reason_description = models.CharField(max_length=255)

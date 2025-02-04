@@ -2,6 +2,18 @@
 
 {% block content %}
 <div class="container mt-4">
+    <h2 class="text-center">Manage Scholarships</h2>
+    <div class="text-center mt-3">
+        <a href="{% url 'add_scholarship' %}" class="btn btn-primary">Scholarships</a>
+        <a href="{% url 'add_student_scholarship' %}" class="btn btn-success">Student Scholarship</a>
+    </div>
+</div>
+{% endblock %}
+
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
     <h2 class="text-center">Manage Scholarship</h2>
 
     <table class="table table-striped">
@@ -32,4 +44,4 @@
 
     <a href="{% url 'add_scholarship' %}" class="btn btn-primary">Add Scholarship</a>
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}

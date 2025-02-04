@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Department,Program,Student,Scholarship,TransferCertificate
-from .forms import DepartmentForm,ProgramForm,StudentForm,ScholarshipForm, TransferCertificateForm
+from .models import Department,Program,Student,Scholarship,TransferCertificate,StudentScholarship
+from .forms import DepartmentForm,ProgramForm,StudentForm,ScholarshipForm, TransferCertificateForm,StudentScholarshipForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
@@ -140,8 +140,33 @@ def delete_scholarship(request, pk):
         return redirect('manage_scholarship')
    return render(request, 'delete_scholarship.html', {'scholarship': scholarship})
 
+def add_student_scholarship(request):
+    if request.method == 'POST':
+        form = StudentScholarshipForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_scholarship')
+    else:
+        form = StudentScholarshipForm()
+    return render(request, 'add_student_scholarship.html', {'form': form})
 
+# def edit_student_scholarship(request, pk):
+#     scholarship = get_object_or_404(Scholarship, pk=pk)
+#     if request.method == 'POST':
+#         form = StudentScholarshipForm(request.POST, instance=scholarship)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('manage_scholarship')
+#     else:
+#         form =StudentScholarshipForm(instance=scholarship)
+#     return render(request, 'edit_scholarship.html', {'form': form})
 
+# def delete_student_scholarship(request, pk):
+#    scholarship = get_object_or_404(Scholarship, pk=pk)
+#    if request.method == 'POST':
+#         scholarship.delete()
+#         return redirect('manage_scholarship')
+#    return render(request, 'delete_scholarship.html', {'scholarship': scholarship})
 
 
 def custom_login(request):
