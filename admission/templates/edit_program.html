@@ -10,6 +10,10 @@
                 <div class="mb-3">
                     {{ form.program_name.label_tag }}
                     {{ form.program_name }}
+                    <label for="id_program_level">Program Level:</label>
+                    {{form.program_level}}
+                    <label for="id_department">Department:</label>
+                    {{form.department}}
                 </div>
                 <button type="submit" class="btn btn-warning">Update</button>
                 <a href="{% url 'manage_program' %}" class="btn btn-secondary">Cancel</a>
@@ -17,4 +21,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock %} 

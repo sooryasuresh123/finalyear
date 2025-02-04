@@ -17,7 +17,15 @@
                 <label class="form-label">Admission Number</label>
                 {{ form.stud_adm_no }}
             </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Registration Number</label>
+                {{ form.stud_reg_no }}
+            </div>
 
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Roll Number</label>
+                {{ form.stud_roll_no }}
+            </div>
             <div class="col-md-6 mb-3">
                 <label class="form-label">Aadhaar Number</label>
                 {{ form.aadhaar }}
@@ -42,6 +50,24 @@
                 <label class="form-label">Date of Birth</label>
                 {{ form.dob }}
             </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Religion</label>
+                {{ form.religion}}
+                <div class="col-md-6 mb-3">
+                    <label for="id_caste">Category</label>
+                    {{ form.caste.category}}
+                </div>
+            <div class="col-md-6 mb-3">
+                <label for="id_caste">Caste</label>
+                {{ form.caste}}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Quota</label>
+                {{ form.quota }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Program</label>
+                {{ form.program}}
 
             <div class="col-md-6 mb-3">
                 <label class="form-label">Parent Name</label>
@@ -106,6 +132,10 @@
             <div class="col-md-6 mb-3">
                 <label class="form-label">Blood Group</label>
                 {{ form.blood_group }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Language</label>
+                {{ form.language }}
             </div>
 
             <div class="col-md-12 mb-3">

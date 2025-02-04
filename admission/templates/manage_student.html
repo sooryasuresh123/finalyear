@@ -7,14 +7,16 @@
     <table class="table table-striped">
         <thead class="table-dark">
             <tr>
-                <th>#</th>
+                <th>Sl no</th>
                 <th>Student Name</th>
-                <th>Admission no</th> 
+                <th>Adm_no</th> 
+                <th>Email</th>
                 <th>Phone</th>
-                <th>Date of birth</th>
+                <th>DOB</th>
                 <th>date of joining</th>
                 <th>Status</th>
                 <th>Gender</th>
+                <th>Language</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,13 +25,14 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ student.stud_name }}</td>
-                
+                <td>{{student.stud_adm_no}}</td>
                 <td>{{ student.email }}</td>
                 <td>{{ student.phone }}</td>
                 <td>{{ student.dob }}</td>
                 <td>{{ student.date_of_joining }}</td>
                 <td>{{ student.status }}</td>
                 <td>{{ student.gender }}</td>
+                <td>{{ student.language }}</td>
                 
 
 
