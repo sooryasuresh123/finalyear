@@ -80,20 +80,27 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.stud_name} ({self.stud_adm_no})"
 
+class ScholarshipType(models.Model):
+    type_name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.type_name
 
 
 class Scholarship(models.Model):
-    scholarship_name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True)  # Scholarship Name
+    scholarship_type = models.ForeignKey(ScholarshipType, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.scholarship_name
+        return self.name
 class StudentScholarship(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)  # Student Foreign Key
-    scholarship = models.ForeignKey(Scholarship, on_delete=models.CASCADE)  # Scholarship Foreign Key
-    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount Field
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    scholarship = models.ForeignKey(Scholarship, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.student.stud_name} - {self.scholarship.name}"
+        return f"{self.student} - {self.scholarship.name} - ₹{self.amount}"
+
     
 class Reason(models.Model):
     reason_description = models.CharField(max_length=255)
@@ -110,3 +117,17 @@ class TransferCertificate(models.Model):
 
     def __str__(self):
         return f"TC {self.tc_no} - {self.stud}"
+
+class Role(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class User(models.Model):
+    user_id = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=100)  # Consider using Django's `make_password` for security
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user_id} - {self.role.name}"
