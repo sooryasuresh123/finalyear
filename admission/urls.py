@@ -40,10 +40,16 @@ urlpatterns = [
     path('delete_student_scholarship/<int:student_scholarship_id>/', views.delete_student_scholarship, name='delete_student_scholarship'),
 
 
-     path('manage_users/', views.manage_users, name='manage_users'),
+    path('manage_users/', views.manage_users, name='manage_users'),
     path('add_user/', views.add_user, name='add_user'),
     path('edit_user/<int:user_id>/', views.edit_user, name='edit_user'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+
+
+    path('qualified_marks/',views. manage_qualified_marks, name='manage_qualified_marks'),
+    path('qualified_marks/add/',views.add_qualified_mark, name='add_qualified_mark'),
+    path('qualified_marks/edit/<int:stud_id>/',views.edit_qualified_mark, name='edit_qualified_mark'),
+    path('qualified_marks/delete/<int:stud_id>/',views.delete_qualified_mark, name='delete_qualified_mark'),
 
 ]
   

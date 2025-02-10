@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Department,Program,Student,TransferCertificate,Scholarship,StudentScholarship,User
-from .forms import DepartmentForm,ProgramForm,StudentForm, TransferCertificateForm,ScholarshipForm,StudentScholarshipForm,UserForm
+from .models import Department,Program,Student,TransferCertificate,Scholarship,StudentScholarship,User,QualifiedMark
+from .forms import DepartmentForm,ProgramForm,StudentForm, TransferCertificateForm,ScholarshipForm,StudentScholarshipForm,UserForm,QualifiedMarkForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
@@ -260,3 +260,55 @@ def delete_user(request, user_id):
         user.delete()
         return redirect('manage_users')
     return render(request, 'delete_user.html', {'user': user})
+
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.decorators import login_required
+
+# @login_required
+# def dashboard(request):
+#     user = request.user
+    
+#     if user.is_student():
+#         return render(request, 'dashboard.html')
+    
+#     elif user.is_office_admin():
+#         return render(request, 'dashboard.html')
+    
+#     elif user.is_principal():
+#         return render(request, 'dashboard.html')
+    
+#     else:
+#         return redirect('login')  # Redirect to login if no role found
+def manage_qualified_marks(request):
+    qualified_marks = QualifiedMark.objects.select_related('stud','board').all()
+    return render(request, 'manage_qualified_marks.html', {'qualified_marks': qualified_marks})
+
+def add_qualified_mark(request):
+    if request.method == 'POST':
+        form = QualifiedMarkForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_qualified_marks')
+    else:
+        form = QualifiedMarkForm()
+    return render(request, 'add_qualified_mark.html', {'form': form})
+
+def edit_qualified_mark(request, stud_id):
+    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
+    if request.method == 'POST':
+        form = QualifiedMarkForm(request.POST, instance=qualified_mark)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_qualified_marks')
+    else:
+        form = QualifiedMarkForm(instance=qualified_mark)
+    return render(request, 'edit_qualified_mark.html', {'form': form})
+
+def delete_qualified_mark(request, stud_id):
+    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
+    
+    if request.method == 'POST':
+        qualified_mark.delete()
+        return redirect('manage_qualified_marks')
+
+    return render(request, 'delete_qualified_mark.html', {'qualified_mark': qualified_mark})

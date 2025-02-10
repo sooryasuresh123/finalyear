@@ -142,11 +142,13 @@
         <ul class="nav flex-column">
             <li class="nav-item"><a class="nav-link" href="/">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="/index"> 🏠Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/manage_students">🎓 Students</a></li>
             <li class="nav-item"><a class="nav-link" href="/manage_program"> Programme</a></li>
             <li class="nav-item"><a class="nav-link" href="">👨‍🏫 Teachers</a></li>
             <li class="nav-item"><a class="nav-link" href="/manage_department">🏢 Departments</a></li>
             <li class="nav-item"><a class="nav-link" href="#">⚙️ Admin</a></li>
+            {% if is_student%}
+                <li class="nav-item"><a class="nav-link" href="/manage_students">🎓 Students</a></li>         
+            {% endif %}
         </ul>
     </div>
 

@@ -1,4 +1,25 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, Group , Permission
+
+
+class CustomUser(AbstractUser):
+    #phone = models.CharField(max_length=15, unique=True)
+
+    groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="customuser_permissions_set", blank=True)
+
+    def is_student(self):
+        return self.groups.filter(name="Student").exists()
+
+    def is_office_admin(self):
+        return self.groups.filter(name="Office Admin").exists()
+
+    def is_principal(self):
+        return self.groups.filter(name="Principal").exists()
+
+    def __str__(self):
+        return self.username
+
 
 class Department(models.Model):
     dept_name = models.CharField(max_length=100, unique=True)
@@ -131,3 +152,23 @@ class User(models.Model):
 
     def __str__(self):
         return f"{self.user_id} - {self.role.name}"
+
+class Board(models.Model):
+    board_name = models.CharField(max_length=255, unique=True)
+    max_mark = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.board_name
+class QualifiedMark(models.Model):
+    stud = models.ForeignKey(Student, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    normalized_marks = models.FloatField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['stud', 'board'], name='unique_student_board')
+        ]
+
+
+    def __str__(self):
+        return f"{self.stud.name} - {self.board.board_name} - {self.normalized_marks}"   

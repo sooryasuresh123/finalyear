@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department,Program,Student,Category,Caste, Religion, Quota,Scholarship,Reason, TransferCertificate,ProgramLevel,Role, User,ScholarshipType
+from .models import Department,Program,Student,Category,Caste, Religion, Quota,Scholarship,Reason, TransferCertificate,ProgramLevel,Role, User,ScholarshipType,Board,QualifiedMark
 
 # Register your models here.
 admin.site.register(Department)
@@ -16,6 +16,8 @@ admin.site.register(Role)
 admin.site.register(User) 
 admin.site.register(Scholarship)
 admin.site.register(ScholarshipType)
+admin.site.register(Board)
+admin.site.register(QualifiedMark)
 
 
 

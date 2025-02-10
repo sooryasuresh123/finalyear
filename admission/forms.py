@@ -1,5 +1,5 @@
 from django import forms
-from .models import Department,Program,Student,TransferCertificate, Caste, Religion, Quota,ProgramLevel,Scholarship, StudentScholarship,User
+from .models import Department,Program,Student,TransferCertificate, Caste, Religion, Quota,ProgramLevel,Scholarship, StudentScholarship,User,QualifiedMark
 
 
 class DepartmentForm(forms.ModelForm):
@@ -107,3 +107,8 @@ class UserForm(forms.ModelForm):
             self.add_error('confirm_password', "Passwords do not match!")
 
         return cleaned_data
+    
+class QualifiedMarkForm(forms.ModelForm):
+    class Meta:
+        model = QualifiedMark
+        fields = ['stud', 'board', 'normalized_marks']
