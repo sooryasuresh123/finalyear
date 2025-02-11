@@ -8,139 +8,182 @@
         {% csrf_token %}
 
         <div class="row">
+            <!-- Personal Information -->
+            <h4 class="mt-3 mb-3"><strong>Personal Information</strong></h4>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Student Name</label>
+                <label class="form-label fw-bold">Student Name</label>
                 {{ form.stud_name }}
             </div>
-
             <div class="col-md-6 mb-3">
-                <label class="form-label">Admission Number</label>
-                {{ form.stud_adm_no }}
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Registration Number</label>
-                {{ form.stud_reg_no }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Roll Number</label>
-                {{ form.stud_roll_no }}
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Aadhaar Number</label>
-                {{ form.aadhaar }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">ABC ID</label>
-                {{ form.abc_id }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Email</label>
-                {{ form.email }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Phone</label>
-                {{ form.phone }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Date of Birth</label>
+                <label class="form-label fw-bold">Date of Birth</label>
                 {{ form.dob }}
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Religion</label>
-                {{ form.religion}}
-                <div class="col-md-6 mb-3">
-                    <label for="id_caste">Category</label>
-                    {{ form.caste.category}}
-                </div>
-            <div class="col-md-6 mb-3">
-                <label for="id_caste">Caste</label>
-                {{ form.caste}}
+                <label class="form-label fw-bold">Aadhaar Number</label>
+                {{ form.aadhaar }}
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Quota</label>
-                {{ form.quota }}
+                <label class="form-label fw-bold">ABC ID</label>
+                {{ form.abc_id }}
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Program</label>
-                {{ form.program}}
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Parent Name</label>
-                {{ form.parent_name }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Parent Mobile</label>
-                {{ form.parent_mob }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">House Name</label>
-                {{ form.house_name }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Post</label>
-                {{ form.post }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">District</label>
-                {{ form.district }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">State</label>
-                {{ form.state }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Pincode</label>
-                {{ form.pincode }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Date of Joining</label>
-                {{ form.date_of_joining }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Income</label>
-                {{ form.income }}
-            </div>
-
-            <div class="col-md-6 mb-3 form-check">
-                <label class="form-check-label">E-Grantz</label>
-                {{ form.egrantz }}
-            </div>
-
-            <div class="col-md-6 mb-3 form-check">
-                <label class="form-check-label">Status</label>
-                {{ form.status }}
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Gender</label>
+                <label class="form-label fw-bold">Gender</label>
                 {{ form.gender }}
             </div>
-
             <div class="col-md-6 mb-3">
-                <label class="form-label">Blood Group</label>
+                <label class="form-label fw-bold">Blood Group</label>
                 {{ form.blood_group }}
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Language</label>
+                <label class="form-label fw-bold">Language</label>
                 {{ form.language }}
             </div>
-
             <div class="col-md-12 mb-3">
-                <label class="form-label">Identification Mark</label>
+                <label class="form-label fw-bold">Identification Mark</label>
                 {{ form.identification_mark }}
+            </div>
+
+            <!-- Admission Details -->
+            <h4 class="mt-3 mb-3"><strong>Admission Details</strong></h4>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Admission Number</label>
+                {{ form.stud_adm_no }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Registration Number</label>
+                {{ form.stud_reg_no }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Roll Number</label>
+                {{ form.stud_roll_no }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Date of Joining</label>
+                {{ form.date_of_joining }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Program</label>
+                {{ form.program }}
+            </div>
+
+            <!-- Contact Information -->
+            <h4 class="mt-3 mb-3"><strong>Contact Information</strong></h4>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <!-- Parent Information -->
+            <h4 class="mt-3 mb-3"><strong>Parent Information</strong></h4>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Parent Name</label>
+                {{ form.parent_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Parent Mobile</label>
+                {{ form.parent_mob }}
+            </div>
+
+            <!-- Address Details -->
+            <h4 class="mt-3 mb-3"><strong>Address Details</strong></h4>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">House Name</label>
+                {{ form.house_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Post</label>
+                {{ form.post }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">District</label>
+                {{ form.district }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">State</label>
+                {{ form.state }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Pincode</label>
+                {{ form.pincode }}
+            </div>
+
+            <!-- Caste & Quota Details -->
+            <h4 class="mt-3 mb-3"><strong>Caste & Quota Details</strong></h4>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Religion</label>
+                {{ form.religion }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Category</label>
+                {{ form.caste.category }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Caste</label>
+                {{ form.caste }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Quota</label>
+                {{ form.quota }}
+            </div>
+
+            <!-- Financial Details -->
+            <h4 class="mt-3 mb-3"><strong>Financial Details</strong></h4>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Income</label>
+                {{ form.income }}
+            </div>
+            <div class="col-md-6 mb-3 form-check">
+                <label class="form-check-label fw-bold">E-Grantz</label>
+                {{ form.egrantz }}
+            </div>
+
+            <!-- Document Uploads -->
+            <h4 class="mt-3 mb-3"><strong>Documents</strong></h4>
+            <div class="col-md-12 mb-3">
+                <label class="form-label fw-bold">Photo</label>
+                {% if student.photo %}
+                    <p>Current File: <a href="{{ student.photo.url }}" target="_blank">View</a></p>
+                {% endif %}
+                {{ form.photo }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label fw-bold">Aadhaar Card</label>
+                {% if student.aadhaar_card %}
+                    <p>Current File: <a href="{{ student.aadhaar_card.url }}" target="_blank">View</a></p>
+                {% endif %}
+                {{ form.aadhaar_card }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label fw-bold">Income Certificate</label>
+                {% if student.income_certificate %}
+                    <p>Current File: <a href="{{ student.income_certificate.url }}" target="_blank">View</a></p>
+                {% endif %}
+                {{ form.income_certificate }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label fw-bold">NSS/NCC Certificate</label>
+                {% if student.nss_ncc_certificate %}
+                    <p>Current File: <a href="{{ student.nss_ncc_certificate.url }}" target="_blank">View</a></p>
+                {% endif %}
+                {{ form.nss_ncc_certificate }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label fw-bold">SSLC Certificate</label>
+                {% if student.sslc_certificate %}
+                    <p>Current File: <a href="{{ student.sslc_certificate.url }}" target="_blank">View</a></p>
+                {% endif %}
+                {{ form.sslc_certificate }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label fw-bold">+2 Certificate</label>
+                {% if student.plus_two_certificate %}
+                    <p>Current File: <a href="{{ student.plus_two_certificate.url }}" target="_blank">View</a></p>
+                {% endif %}
+                {{ form.plus_two_certificate }}
             </div>
         </div>
 

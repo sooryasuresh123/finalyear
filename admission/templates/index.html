@@ -189,7 +189,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-4 mb-3">
+        {% comment %} <div class="col-md-6 col-lg-4 mb-3">
             <div class="card shadow-sm border-0 rounded">
                 <div class="card-body text-center">
                     <h5 class="card-title"style="color: #008B8B;">Manage Users</h5>
@@ -197,8 +197,8 @@
                     <a href="{% url 'manage_users' %}" class="btn" style="background-color: #008B8B; color: white;">Go to Users</a>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-lg-4 mb-3">
+        </div> {% endcomment %}
+        {% comment %} <div class="col-md-6 col-lg-4 mb-3">
             <div class="card shadow-sm border-0 rounded">
                 <div class="card-body text-center">
                     <h5 class="card-title" style="color: #333333;">Manage Documents</h5>  <!-- Dark grey color -->
@@ -206,13 +206,13 @@
                     <a href="#" class="btn" style="background-color: #333333; color: white;">Go to Documents</a>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
         <div class="col-md-6 col-lg-4 mb-3">
             <div class="card shadow-sm border-0 rounded">
                 <div class="card-body text-center">
-                    <h5 class="card-title" style="color: #D35400;">Manage Marks</h5>  <!-- Dark orange color -->
+                    <h5 class="card-title" style="color: #008B8B;">Manage Marks</h5>  <!-- Dark orange color -->
                     <p class="card-text text-muted">Manage student qualified marks, board and view them.</p>
-                    <a href="{% url 'manage_qualified_marks' %}" class="btn" style="background-color: #D35400; color: white;">Go to Marks</a>
+                    <a href="{% url 'manage_qualified_marks' %}" class="btn" style="background-color: #008B8B; color: white;">Go to Marks</a>
                 </div>
             </div>
         </div>

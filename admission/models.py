@@ -1,24 +1,25 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group , Permission
+from django.contrib.auth.models import AbstractUser, Group , Permission,User
+from django.core.exceptions import ValidationError
 
 
-class CustomUser(AbstractUser):
-    #phone = models.CharField(max_length=15, unique=True)
+# class CustomUser(AbstractUser):
+#     #phone = models.CharField(max_length=15, unique=True)
 
-    groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
-    user_permissions = models.ManyToManyField(Permission, related_name="customuser_permissions_set", blank=True)
+#     groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
+#     user_permissions = models.ManyToManyField(Permission, related_name="customuser_permissions_set", blank=True)
 
-    def is_student(self):
-        return self.groups.filter(name="Student").exists()
+#     def is_student(self):
+#         return self.groups.filter(name="Student").exists()
 
-    def is_office_admin(self):
-        return self.groups.filter(name="Office Admin").exists()
+#     def is_office_admin(self):
+#         return self.groups.filter(name="Office Admin").exists()
 
-    def is_principal(self):
-        return self.groups.filter(name="Principal").exists()
+#     def is_principal(self):
+#         return self.groups.filter(name="Principal").exists()
 
-    def __str__(self):
-        return self.username
+#     def __str__(self):
+#         return self.username
 
 
 class Department(models.Model):
@@ -65,10 +66,23 @@ class Quota(models.Model):
 
     def __str__(self):
         return self.quota_name
+class Pathway(models.Model):
+    pathway_name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.pathway_name
+
+def validate_file_size(value):
+    """Validate that file size is less than 50KB (for photo only)."""
+    limit = 50* 1024 * 1024  # 50KB
+    if value.size > limit:
+        raise ValidationError("File size should not exceed 50KB.")
+
 
 
 
 class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True )
     stud_name = models.CharField(max_length=100)
     stud_adm_no = models.CharField(max_length=20, unique=True)
     stud_reg_no = models.CharField(max_length=20, unique=True, blank=True, null=True) 
@@ -81,7 +95,9 @@ class Student(models.Model):
     caste = models.ForeignKey(Caste, on_delete=models.SET_NULL, blank=True, null=True)  # Foreign Key to Caste
     religion = models.ForeignKey(Religion, on_delete=models.SET_NULL, blank=True, null=True)  # Foreign Key to Religion
     quota = models.ForeignKey(Quota, on_delete=models.SET_NULL, blank=True, null=True)  
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)  
     program= models.ForeignKey(Program, on_delete=models.SET_NULL, blank=True, null=True)  # Foreign Key to Quota# Foreign Key to Quota
+    pathway= models.ForeignKey(Pathway, on_delete=models.SET_NULL, blank=True, null=True)  # Foreign Key to Quota# Foreign Key to Quota
     parent_name = models.CharField(max_length=100)
     parent_mob = models.CharField(max_length=15)
     house_name = models.CharField(max_length=100)
@@ -97,9 +113,26 @@ class Student(models.Model):
     blood_group = models.CharField(max_length=5, choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B-'), ('O+', 'O-'), ('AB+', 'AB-')])
     language=models.CharField(max_length=10, choices=[('Malayalam', 'Malayalam'), ('Hindi', 'Hindi')] ,default='Malayalam')
     identification_mark = models.TextField(blank=True, null=True)
+    photo = models.ImageField(upload_to='documents/photos/', validators=[validate_file_size], null=True, blank=True)
+    aadhaar_card = models.FileField(upload_to='documents/aadhaar/', null=True, blank=True)
+    income_certificate = models.FileField(upload_to='documents/income/', null=True, blank=True)
+    ncc_nss_certificate = models.FileField(upload_to='documents/ncc_nss/', null=True, blank=True)
+    sslc_certificate = models.FileField(upload_to='documents/sslc/', null=True, blank=True)
+    plus_two_certificate = models.FileField(upload_to='documents/plus_two/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.stud_name} ({self.stud_adm_no})"
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+@receiver(post_save, sender=Student)
+def create_user_for_student(sender, instance, created, **kwargs):
+    if created and not instance.user:
+        username = instance.email.split('@')[0]  # Create a username from email
+        password = User.objects.make_random_password()  # Generate a random password
+        user = User.objects.create_user(username=username, email=instance.email, password=password)
+        instance.user = user
+        instance.save()
+   
 
 class ScholarshipType(models.Model):
     type_name = models.CharField(max_length=100, unique=True)
@@ -145,13 +178,13 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
-class User(models.Model):
-    user_id = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=100)  # Consider using Django's `make_password` for security
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+# class User(models.Model):
+#     user_id = models.CharField(max_length=50, unique=True)
+#     password = models.CharField(max_length=100)  # Consider using Django's `make_password` for security
+#     role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"{self.user_id} - {self.role.name}"
+#     def __str__(self):
+#         return f"{self.user_id} - {self.role.name}"
 
 class Board(models.Model):
     board_name = models.CharField(max_length=255, unique=True)
@@ -171,4 +204,4 @@ class QualifiedMark(models.Model):
 
 
     def __str__(self):
-        return f"{self.stud.name} - {self.board.board_name} - {self.normalized_marks}"   
+        return f"{self.stud.stud_name} - {self.board.board_name} - {self.normalized_marks}"   

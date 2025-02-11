@@ -63,9 +63,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'admission.context_processors.is_student',
-                'admission.context_processors.is_princi',
-                'admission.context_processors.is_office'
             ],
         },
     },
@@ -126,5 +123,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/'  # Redirect to homepage or dashboard
-LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL='login' 
+
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

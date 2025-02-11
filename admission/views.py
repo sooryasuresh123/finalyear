@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Department,Program,Student,TransferCertificate,Scholarship,StudentScholarship,User,QualifiedMark
-from .forms import DepartmentForm,ProgramForm,StudentForm, TransferCertificateForm,ScholarshipForm,StudentScholarshipForm,UserForm,QualifiedMarkForm
+from .models import Department,Program,Student,TransferCertificate,Scholarship,StudentScholarship,QualifiedMark
+from .forms import DepartmentForm,ProgramForm,StudentForm, TransferCertificateForm,ScholarshipForm,StudentScholarshipForm,QualifiedMarkForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def index(request):
     return render(request,"index.html")
 
@@ -109,21 +109,21 @@ def delete_student(request, pk):
    return render(request, 'delete_student.html', {'student': student})
 
 
-def custom_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+# def custom_login(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
         
-        if user is not None:
-            login(request, user)
-            if user.is_superuser:
+#         if user is not None:
+#             login(request, user)
+#             if user.is_superuser:
                 
-                return redirect('index')  # Redirect to home page or dashboard
-        else:
-            messages.error(request, "Invalid credentials")
+#                 return redirect('index')  # Redirect to home page or dashboard
+#         else:
+#             messages.error(request, "Invalid credentials")
     
-    return render(request, 'login.html')
+#     return render(request, 'login.html')
 
 def transfer_certificate_list(request):
     tc_list = TransferCertificate.objects.all()
@@ -229,37 +229,37 @@ def delete_student_scholarship(request, student_scholarship_id):
 
 
 
-def manage_users(request):
-    users = User.objects.all()
-    return render(request, 'manage_users.html', {'users': users})
+# def manage_users(request):
+#     users = User.objects.all()
+#     return render(request, 'manage_users.html', {'users': users})
 
-def add_user(request):
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_users')
-    else:
-        form = UserForm()
-    return render(request, 'add_user.html', {'form': form})
+# def add_user(request):
+#     if request.method == 'POST':
+#         form = UserForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('manage_users')
+#     else:
+#         form = UserForm()
+#     return render(request, 'add_user.html', {'form': form})
 
-def edit_user(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    if request.method == 'POST':
-        form = UserForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_users')
-    else:
-        form = UserForm(instance=user)
-    return render(request, 'edit_user.html', {'form': form})
+# def edit_user(request, user_id):
+#     user = get_object_or_404(User, pk=user_id)
+#     if request.method == 'POST':
+#         form = UserForm(request.POST, instance=user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('manage_users')
+#     else:
+#         form = UserForm(instance=user)
+#     return render(request, 'edit_user.html', {'form': form})
 
-def delete_user(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    if request.method == 'POST':
-        user.delete()
-        return redirect('manage_users')
-    return render(request, 'delete_user.html', {'user': user})
+# def delete_user(request, user_id):
+#     user = get_object_or_404(User, pk=user_id)
+#     if request.method == 'POST':
+#         user.delete()
+#         return redirect('manage_users')
+#     return render(request, 'delete_user.html', {'user': user})
 
 # from django.shortcuts import render, redirect
 # from django.contrib.auth.decorators import login_required
