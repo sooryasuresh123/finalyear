@@ -109,22 +109,6 @@ def delete_student(request, pk):
    return render(request, 'delete_student.html', {'student': student})
 
 
-# def custom_login(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-        
-#         if user is not None:
-#             login(request, user)
-#             if user.is_superuser:
-                
-#                 return redirect('index')  # Redirect to home page or dashboard
-#         else:
-#             messages.error(request, "Invalid credentials")
-    
-#     return render(request, 'login.html')
-
 def transfer_certificate_list(request):
     tc_list = TransferCertificate.objects.all()
     return render(request, 'transfer_certificate_list.html', {'tc_list': tc_list})
@@ -226,7 +210,55 @@ def delete_student_scholarship(request, student_scholarship_id):
     student_scholarship.delete()
     return redirect('student_scholarships')
 
+def manage_qualified_marks(request):
+    qualified_marks = QualifiedMark.objects.select_related('stud','board').all()
+    return render(request, 'manage_qualified_marks.html', {'qualified_marks': qualified_marks})
 
+def add_qualified_mark(request):
+    if request.method == 'POST':
+        form = QualifiedMarkForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_qualified_marks')
+    else:
+        form = QualifiedMarkForm()
+    return render(request, 'add_qualified_mark.html', {'form': form})
+
+def edit_qualified_mark(request, stud_id):
+    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
+    if request.method == 'POST':
+        form = QualifiedMarkForm(request.POST, instance=qualified_mark)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_qualified_marks')
+    else:
+        form = QualifiedMarkForm(instance=qualified_mark)
+    return render(request, 'edit_qualified_mark.html', {'form': form})
+
+def delete_qualified_mark(request, stud_id):
+    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
+    
+    if request.method == 'POST':
+        qualified_mark.delete()
+        return redirect('manage_qualified_marks')
+
+    return render(request, 'delete_qualified_mark.html', {'qualified_mark': qualified_mark})
+
+# def custom_login(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
+        
+#         if user is not None:
+#             login(request, user)
+#             if user.is_superuser:
+                
+#                 return redirect('index')  # Redirect to home page or dashboard
+#         else:
+#             messages.error(request, "Invalid credentials")
+    
+#     return render(request, 'login.html')
 
 
 # def manage_users(request):
@@ -279,36 +311,3 @@ def delete_student_scholarship(request, student_scholarship_id):
     
 #     else:
 #         return redirect('login')  # Redirect to login if no role found
-def manage_qualified_marks(request):
-    qualified_marks = QualifiedMark.objects.select_related('stud','board').all()
-    return render(request, 'manage_qualified_marks.html', {'qualified_marks': qualified_marks})
-
-def add_qualified_mark(request):
-    if request.method == 'POST':
-        form = QualifiedMarkForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_qualified_marks')
-    else:
-        form = QualifiedMarkForm()
-    return render(request, 'add_qualified_mark.html', {'form': form})
-
-def edit_qualified_mark(request, stud_id):
-    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
-    if request.method == 'POST':
-        form = QualifiedMarkForm(request.POST, instance=qualified_mark)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_qualified_marks')
-    else:
-        form = QualifiedMarkForm(instance=qualified_mark)
-    return render(request, 'edit_qualified_mark.html', {'form': form})
-
-def delete_qualified_mark(request, stud_id):
-    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
-    
-    if request.method == 'POST':
-        qualified_mark.delete()
-        return redirect('manage_qualified_marks')
-
-    return render(request, 'delete_qualified_mark.html', {'qualified_mark': qualified_mark})

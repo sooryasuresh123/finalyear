@@ -1,6 +1,7 @@
 from django import forms
 from .models import Department,Program,Student,TransferCertificate, Caste, Religion, Quota,ProgramLevel,Scholarship, StudentScholarship,QualifiedMark,Category,User
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -19,8 +20,7 @@ class ProgramForm(forms.ModelForm):
             'program_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter program name'}),
 
         }
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User, Group
+
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
@@ -33,8 +33,6 @@ class StudentForm(forms.ModelForm):
         caste = forms.ModelChoiceField(queryset=Caste.objects.all(), required=False)
         religion = forms.ModelChoiceField(queryset=Religion.objects.all(), required=False)
         quota = forms.ModelChoiceField(queryset=Quota.objects.all(), required=False)
-        # category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)
-
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'}),
             'date_of_joining': forms.DateInput(attrs={'type': 'date'}),
@@ -60,26 +58,7 @@ class StudentForm(forms.ModelForm):
             if not photo.name.lower().endswith(('jpg', 'jpeg', 'png')):
                 raise forms.ValidationError("Only JPG, JPEG, and PNG files are allowed.")
         return photo
-    def save(self, commit=True):
-        # Save the user instance
-        student = super().save(commit=False)
-        
-        if student.pk:
-            if student.user_id:
-                student.user_id.delete()
-        
-        # Create the corresponding user
-        user = User.objects.create_user(
-            username=self.cleaned_data['stud_name'],  # Use email as username
-            email=self.cleaned_data['email'],
-            password=self.cleaned_data['password'],  # Set the password
-        )
-        student.user_id = user  # Link the teacher to the user
-        
-        if commit:
-            student.save()
-        
-        return student
+    
 
 class TransferCertificateForm(forms.ModelForm):
     class Meta:
@@ -107,6 +86,12 @@ class StudentScholarshipForm(forms.ModelForm):
             'scholarship': forms.Select(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Amount'}),
         }
+
+class QualifiedMarkForm(forms.ModelForm):
+    class Meta:
+        model = QualifiedMark
+        fields = ['stud', 'board', 'normalized_marks']
+    
 # class UserForm(forms.ModelForm):
 #     class Meta:
 #         model = User
@@ -139,8 +124,4 @@ class StudentScholarshipForm(forms.ModelForm):
 
 #         return cleaned_data
     
-class QualifiedMarkForm(forms.ModelForm):
-    class Meta:
-        model = QualifiedMark
-        fields = ['stud', 'board', 'normalized_marks']
-    
+

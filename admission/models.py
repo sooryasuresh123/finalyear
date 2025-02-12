@@ -3,23 +3,7 @@ from django.contrib.auth.models import AbstractUser, Group , Permission,User
 from django.core.exceptions import ValidationError
 
 
-# class CustomUser(AbstractUser):
-#     #phone = models.CharField(max_length=15, unique=True)
 
-#     groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
-#     user_permissions = models.ManyToManyField(Permission, related_name="customuser_permissions_set", blank=True)
-
-#     def is_student(self):
-#         return self.groups.filter(name="Student").exists()
-
-#     def is_office_admin(self):
-#         return self.groups.filter(name="Office Admin").exists()
-
-#     def is_principal(self):
-#         return self.groups.filter(name="Principal").exists()
-
-#     def __str__(self):
-#         return self.username
 
 
 class Department(models.Model):
@@ -77,12 +61,16 @@ def validate_file_size(value):
     limit = 50* 1024 * 1024  # 50KB
     if value.size > limit:
         raise ValidationError("File size should not exceed 50KB.")
+class Teacher:
+    teachers_name = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return self.teachers_name
 
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True )
+    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True,default=None)
     stud_name = models.CharField(max_length=100)
     stud_adm_no = models.CharField(max_length=20, unique=True)
     stud_reg_no = models.CharField(max_length=20, unique=True, blank=True, null=True) 
@@ -178,13 +166,6 @@ class Role(models.Model):
     def __str__(self):
         return self.name
 
-# class User(models.Model):
-#     user_id = models.CharField(max_length=50, unique=True)
-#     password = models.CharField(max_length=100)  # Consider using Django's `make_password` for security
-#     role = models.ForeignKey(Role, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return f"{self.user_id} - {self.role.name}"
 
 class Board(models.Model):
     board_name = models.CharField(max_length=255, unique=True)
@@ -205,3 +186,30 @@ class QualifiedMark(models.Model):
 
     def __str__(self):
         return f"{self.stud.stud_name} - {self.board.board_name} - {self.normalized_marks}"   
+# class CustomUser(AbstractUser):
+#     #phone = models.CharField(max_length=15, unique=True)
+
+#     groups = models.ManyToManyField(Group, related_name="customuser_set", blank=True)
+#     user_permissions = models.ManyToManyField(Permission, related_name="customuser_permissions_set", blank=True)
+
+#     def is_student(self):
+#         return self.groups.filter(name="Student").exists()
+
+#     def is_office_admin(self):
+#         return self.groups.filter(name="Office Admin").exists()
+
+#     def is_principal(self):
+#         return self.groups.filter(name="Principal").exists()
+
+#     def __str__(self):
+#         return self.username
+
+
+
+# class User(models.Model):
+#     user_id = models.CharField(max_length=50, unique=True)
+#     password = models.CharField(max_length=100)  # Consider using Django's `make_password` for security
+#     role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return f"{self.user_id} - {self.role.name}"
