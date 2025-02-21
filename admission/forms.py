@@ -1,5 +1,5 @@
 from django import forms
-from .models import Department,Program,Student,TransferCertificate, Caste, Religion, Quota,ProgramLevel,Scholarship, StudentScholarship,QualifiedMark,Category,User
+from .models import Department,Program,Student,TransferCertificate, Caste, Religion, Quota,ProgramLevel,Scholarship, StudentScholarship,Category,User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
 
@@ -33,6 +33,8 @@ class StudentForm(forms.ModelForm):
         caste = forms.ModelChoiceField(queryset=Caste.objects.all(), required=False)
         religion = forms.ModelChoiceField(queryset=Religion.objects.all(), required=False)
         quota = forms.ModelChoiceField(queryset=Quota.objects.all(), required=False)
+        category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Select Category", required=True)
+        normalized_mark = forms.FloatField(widget=forms.NumberInput(attrs={'step': '0.01'})) 
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'}),
             'date_of_joining': forms.DateInput(attrs={'type': 'date'}),
@@ -58,7 +60,14 @@ class StudentForm(forms.ModelForm):
             if not photo.name.lower().endswith(('jpg', 'jpeg', 'png')):
                 raise forms.ValidationError("Only JPG, JPEG, and PNG files are allowed.")
         return photo
-    
+from django import forms
+from .models import Document
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['student', 'document_name', 'document_file']
+
 
 class TransferCertificateForm(forms.ModelForm):
     class Meta:
@@ -87,10 +96,10 @@ class StudentScholarshipForm(forms.ModelForm):
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Amount'}),
         }
 
-class QualifiedMarkForm(forms.ModelForm):
-    class Meta:
-        model = QualifiedMark
-        fields = ['stud', 'board', 'normalized_marks']
+# class QualifiedMarkForm(forms.ModelForm):
+#     class Meta:
+#         model = QualifiedMark
+#         fields = ['stud', 'board', 'normalized_marks']
     
 # class UserForm(forms.ModelForm):
 #     class Meta:

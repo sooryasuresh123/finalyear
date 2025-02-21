@@ -44,10 +44,14 @@ urlpatterns = [
     # path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
 
 
-    path('qualified_marks/',views. manage_qualified_marks, name='manage_qualified_marks'),
-    path('qualified_marks/add/',views.add_qualified_mark, name='add_qualified_mark'),
-    path('qualified_marks/edit/<int:stud_id>/',views.edit_qualified_mark, name='edit_qualified_mark'),
-    path('qualified_marks/delete/<int:stud_id>/',views.delete_qualified_mark, name='delete_qualified_mark'),
+    # path('qualified_marks/',views. manage_qualified_marks, name='manage_qualified_marks'),
+    # path('qualified_marks/add/',views.add_qualified_mark, name='add_qualified_mark'),
+    # path('qualified_marks/edit/<int:stud_id>/',views.edit_qualified_mark, name='edit_qualified_mark'),
+    # path('qualified_marks/delete/<int:stud_id>/',views.delete_qualified_mark, name='delete_qualified_mark'),
+    path('manage_documents/', views.manage_documents, name='manage_documents'),
+    path('documents/upload/', views.upload_document, name='upload_document'),
+    path('documents/edit/<int:pk>/', views.edit_document, name='edit_document'),
+    path('documents/delete/<int:pk>/', views.delete_document, name='delete_document'),
 
 
 

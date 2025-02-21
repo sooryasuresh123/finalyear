@@ -26,10 +26,10 @@ class Program(models.Model):
     def __str__(self):
         return self.program_name
 class Category(models.Model):
-    category_name = models.CharField(max_length=100, unique=True,default='Null')
+    name = models.CharField(max_length=100, unique=True,default='Null')
 
     def __str__(self):
-        return self.category_name
+        return self.name
 class Caste(models.Model):
     caste_name = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -68,7 +68,12 @@ class Teacher:
         return self.teachers_name
 
 
+class Board(models.Model):
+    board_name = models.CharField(max_length=255, unique=True)
+    max_mark = models.PositiveIntegerField()
 
+    def __str__(self):
+        return self.board_name
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,null=True,default=None)
     stud_name = models.CharField(max_length=100)
@@ -86,6 +91,8 @@ class Student(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)  
     program= models.ForeignKey(Program, on_delete=models.SET_NULL, blank=True, null=True)  # Foreign Key to Quota# Foreign Key to Quota
     pathway= models.ForeignKey(Pathway, on_delete=models.SET_NULL, blank=True, null=True)  # Foreign Key to Quota# Foreign Key to Quota
+    board=models.ForeignKey(Board, on_delete=models.SET_NULL, blank=True, null=True)
+    normalized_mark = models.FloatField(default=0.0)
     parent_name = models.CharField(max_length=100)
     parent_mob = models.CharField(max_length=15)
     house_name = models.CharField(max_length=100)
@@ -101,25 +108,53 @@ class Student(models.Model):
     blood_group = models.CharField(max_length=5, choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B-'), ('O+', 'O-'), ('AB+', 'AB-')])
     language=models.CharField(max_length=10, choices=[('Malayalam', 'Malayalam'), ('Hindi', 'Hindi')] ,default='Malayalam')
     identification_mark = models.TextField(blank=True, null=True)
-    photo = models.ImageField(upload_to='documents/photos/', validators=[validate_file_size], null=True, blank=True)
-    aadhaar_card = models.FileField(upload_to='documents/aadhaar/', null=True, blank=True)
-    income_certificate = models.FileField(upload_to='documents/income/', null=True, blank=True)
-    ncc_nss_certificate = models.FileField(upload_to='documents/ncc_nss/', null=True, blank=True)
-    sslc_certificate = models.FileField(upload_to='documents/sslc/', null=True, blank=True)
-    plus_two_certificate = models.FileField(upload_to='documents/plus_two/', null=True, blank=True)
+   
+   
+    def save(self, *args, **kwargs):
+        # If student does not have an associated user, create one
+        if not self.user:
+            if User.objects.filter(username=self.email).exists():
+                raise ValidationError("User with this email already exists.")
 
+            user = User.objects.create_user(username=self.email, email=self.email, password=self.aadhaar)
+            self.user = user
+
+            # Add user to "Student" group in Django Admin (Create group if it doesn't exist)
+            # student_group, created = Group.objects.get_or_create(name='Student')
+            # user.groups.add(student_group)
+
+            user.save()
+
+        super(Student, self).save(*args, **kwargs)
     def __str__(self):
         return f"{self.stud_name} ({self.stud_adm_no})"
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-@receiver(post_save, sender=Student)
-def create_user_for_student(sender, instance, created, **kwargs):
-    if created and not instance.user:
-        username = instance.email.split('@')[0]  # Create a username from email
-        password = User.objects.make_random_password()  # Generate a random password
-        user = User.objects.create_user(username=username, email=instance.email, password=password)
-        instance.user = user
-        instance.save()
+    
+from django.db import models # Importing the Student model
+
+class Document(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)  # Foreign key to Student table
+    document_name = models.CharField(max_length=255)  # Document name
+    document_file = models.FileField(upload_to='documents/')  # File upload field
+     # photo = models.ImageField(upload_to='documents/photos/', validators=[validate_file_size], null=True, blank=True)
+    # aadhaar_card = models.FileField(upload_to='documents/aadhaar/', null=True, blank=True)
+    # income_certificate = models.FileField(upload_to='documents/income/', null=True, blank=True)
+    # ncc_nss_certificate = models.FileField(upload_to='documents/ncc_nss/', null=True, blank=True)
+    # sslc_certificate = models.FileField(upload_to='documents/sslc/', null=True, blank=True)
+    # plus_two_certificate = models.FileField(upload_to='documents/plus_two/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.student.name} - {self.document_name}"
+  
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# @receiver(post_save, sender=Student)
+# def create_user_for_student(sender, instance, created, **kwargs):
+#     if created and not instance.user:
+#         username = instance.email.split('@')[0]  # Create a username from email
+#         password = User.objects.make_random_password()  # Generate a random password
+#         user = User.objects.create_user(username=username, email=instance.email, password=password)
+#         instance.user = user
+#         instance.save()
    
 
 class ScholarshipType(models.Model):
@@ -167,25 +202,21 @@ class Role(models.Model):
         return self.name
 
 
-class Board(models.Model):
-    board_name = models.CharField(max_length=255, unique=True)
-    max_mark = models.PositiveIntegerField()
 
-    def __str__(self):
-        return self.board_name
-class QualifiedMark(models.Model):
-    stud = models.ForeignKey(Student, on_delete=models.CASCADE)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    normalized_marks = models.FloatField()
+# class QualifiedMark(models.Model):
+#     stud = models.ForeignKey(Student, on_delete=models.CASCADE)
+#     board = models.ForeignKey(Board, on_delete=models.CASCADE)
+#     normalized_marks = models.FloatField()
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['stud', 'board'], name='unique_student_board')
-        ]
+#     class Meta:
+#         constraints = [
+#             models.UniqueConstraint(fields=['stud', 'board'], name='unique_student_board')
+#         ]
 
 
-    def __str__(self):
-        return f"{self.stud.stud_name} - {self.board.board_name} - {self.normalized_marks}"   
+#     def __str__(self):
+#         return f"{self.stud.stud_name} - {self.board.board_name} - {self.normalized_marks}"  
+     
 # class CustomUser(AbstractUser):
 #     #phone = models.CharField(max_length=15, unique=True)
 

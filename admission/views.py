@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Department,Program,Student,TransferCertificate,Scholarship,StudentScholarship,QualifiedMark
-from .forms import DepartmentForm,ProgramForm,StudentForm, TransferCertificateForm,ScholarshipForm,StudentScholarshipForm,QualifiedMarkForm
+from .models import Department,Program,Student,TransferCertificate,Scholarship,StudentScholarship
+from .forms import DepartmentForm,ProgramForm,StudentForm, TransferCertificateForm,ScholarshipForm,StudentScholarshipForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -210,39 +210,39 @@ def delete_student_scholarship(request, student_scholarship_id):
     student_scholarship.delete()
     return redirect('student_scholarships')
 
-def manage_qualified_marks(request):
-    qualified_marks = QualifiedMark.objects.select_related('stud','board').all()
-    return render(request, 'manage_qualified_marks.html', {'qualified_marks': qualified_marks})
+# def manage_qualified_marks(request):
+#     qualified_marks = QualifiedMark.objects.select_related('stud','board').all()
+#     return render(request, 'manage_qualified_marks.html', {'qualified_marks': qualified_marks})
 
-def add_qualified_mark(request):
-    if request.method == 'POST':
-        form = QualifiedMarkForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_qualified_marks')
-    else:
-        form = QualifiedMarkForm()
-    return render(request, 'add_qualified_mark.html', {'form': form})
+# def add_qualified_mark(request):
+#     if request.method == 'POST':
+#         form = QualifiedMarkForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('manage_qualified_marks')
+#     else:
+#         form = QualifiedMarkForm()
+#     return render(request, 'add_qualified_mark.html', {'form': form})
 
-def edit_qualified_mark(request, stud_id):
-    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
-    if request.method == 'POST':
-        form = QualifiedMarkForm(request.POST, instance=qualified_mark)
-        if form.is_valid():
-            form.save()
-            return redirect('manage_qualified_marks')
-    else:
-        form = QualifiedMarkForm(instance=qualified_mark)
-    return render(request, 'edit_qualified_mark.html', {'form': form})
+# def edit_qualified_mark(request, stud_id):
+#     qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
+#     if request.method == 'POST':
+#         form = QualifiedMarkForm(request.POST, instance=qualified_mark)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('manage_qualified_marks')
+#     else:
+#         form = QualifiedMarkForm(instance=qualified_mark)
+#     return render(request, 'edit_qualified_mark.html', {'form': form})
 
-def delete_qualified_mark(request, stud_id):
-    qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
+# def delete_qualified_mark(request, stud_id):
+#     qualified_mark = get_object_or_404(QualifiedMark, stud_id=stud_id)
     
-    if request.method == 'POST':
-        qualified_mark.delete()
-        return redirect('manage_qualified_marks')
+#     if request.method == 'POST':
+#         qualified_mark.delete()
+#         return redirect('manage_qualified_marks')
 
-    return render(request, 'delete_qualified_mark.html', {'qualified_mark': qualified_mark})
+#     return render(request, 'delete_qualified_mark.html', {'qualified_mark': qualified_mark})
 
 # def custom_login(request):
 #     if request.method == 'POST':
@@ -311,3 +311,42 @@ def delete_qualified_mark(request, stud_id):
     
 #     else:
 #         return redirect('login')  # Redirect to login if no role found
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Document
+from .forms import DocumentForm
+
+# List all documents
+def manage_documents(request):
+    documents = Document.objects.all()
+    return render(request, 'manage_documents.html', {'documents': documents})
+
+# Upload a new document
+def upload_document(request):
+    if request.method == "POST":
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_documents')  # Redirect to document list after saving
+    else:
+        form = DocumentForm()
+    return render(request, 'document_form.html', {'form': form})
+
+# Edit an existing document
+def edit_document(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+    if request.method == "POST":
+        form = DocumentForm(request.POST, request.FILES, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_documents')
+    else:
+        form = DocumentForm(instance=document)
+    return render(request, 'document_form.html', {'form': form})
+
+# Delete a document
+def delete_document(request, pk):
+    document = get_object_or_404(Document, pk=pk)
+    if request.method == "POST":
+        document.delete()
+        return redirect('manage_documents')
+    return render(request, 'document_confirm_delete.html', {'document': document})
