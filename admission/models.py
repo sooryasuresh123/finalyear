@@ -130,10 +130,15 @@ class Student(models.Model):
         return f"{self.stud_name} ({self.stud_adm_no})"
     
 from django.db import models # Importing the Student model
+class DocType(models.Model):
+    name = models.CharField(max_length=255, unique=True)  # Unique document type name
+
+    def __str__(self):
+        return self.name
 
 class Document(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)  # Foreign key to Student table
-    document_name = models.CharField(max_length=255)  # Document name
+    document_name = models.ForeignKey(DocType, on_delete=models.CASCADE)  # Document name
     document_file = models.FileField(upload_to='documents/')  # File upload field
      # photo = models.ImageField(upload_to='documents/photos/', validators=[validate_file_size], null=True, blank=True)
     # aadhaar_card = models.FileField(upload_to='documents/aadhaar/', null=True, blank=True)
@@ -143,7 +148,7 @@ class Document(models.Model):
     # plus_two_certificate = models.FileField(upload_to='documents/plus_two/', null=True, blank=True)
 
     def __str__(self):
-        return f"{self.student.name} - {self.document_name}"
+        return f"{self.student.stud_name} - {self.document_name}"
   
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
