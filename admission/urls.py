@@ -5,6 +5,11 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('',views.index,name='index'),
+    path('student-login/',views. student_login, name='student_login'),
+    path('student-dashboard/', views.student_dashboard, name='student_dashboard'),
+    path('office-admin-dashboard/', views.office_admin_dashboard, name='office_admin_dashboard'),
+    path('principal-dashboard/', views.principal_dashboard, name='principal_dashboard'),
+    
     path('manage_department',views.manage_department,name='manage_department'),
     path('add_department',views.add_department,name='add_department'),
     path('edit_department/<int:pk>',views.edit_department,name='edit_department'),

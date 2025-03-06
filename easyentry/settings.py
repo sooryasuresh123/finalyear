@@ -131,3 +131,7 @@ import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
+]
+AUTH_USER_MODEL = 'auth.User'  # Keep the default User model unless using a custom one

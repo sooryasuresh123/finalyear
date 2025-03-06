@@ -61,11 +61,11 @@ def validate_file_size(value):
     limit = 50* 1024 * 1024  # 50KB
     if value.size > limit:
         raise ValidationError("File size should not exceed 50KB.")
-class Teacher:
-    teachers_name = models.CharField(max_length=255, unique=True)
-
+class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True,default=None)
+    
     def __str__(self):
-        return self.teachers_name
+        return self.user.username
 
 
 class Board(models.Model):
@@ -135,6 +135,11 @@ class DocType(models.Model):
 
     def __str__(self):
         return self.name
+
+# class DocumentType(models.Model):
+#     name=models.CharField(max_length=50,unique=True)
+#     def __str__(self):
+#         return self.name
 
 class Document(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)  # Foreign key to Student table

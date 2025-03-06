@@ -9,6 +9,94 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def index(request):
     return render(request,"index.html")
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Student,Teacher
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+@login_required
+def student_login(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if not email or not password:
+            return render(request, 'registration/login.html', {'error': 'Email and password are required'})
+
+        try:
+            user = User.objects.get(email=email)  # Get user by email
+            print(f"Found user: {user}")  # Debugging
+
+            # Authenticate using email as username and Aadhaar as password
+            user = authenticate(username=user.username, password=password)
+            
+            if user:
+                try:
+                    student = Student.objects.get(user=user)  # Ensure user is a student
+                    login(request, user)
+                    print("Login successful")  # Debugging
+                    return redirect('student_dashboard')  # Redirect to student dashboard
+                except Student.DoesNotExist:
+                    print("Not a student account")  # Debugging
+                    return render(request, 'error.html', {'message': 'Unauthorized access.'})
+            else:
+                print("Invalid credentials")  # Debugging
+                return render(request, 'registration/login.html', {'error': 'Invalid credentials'})
+
+        except User.DoesNotExist:
+            print("Email not found")  # Debugging
+            return render(request, 'registration/login.html', {'error': 'Email not found'})
+
+    return render(request, 'registration/login.html')
+@login_required
+def student_dashboard(request):
+    try:
+        student = Student.objects.get(user=request.user)  # Ensure user is a student
+        return render(request, 'dashboard_student.html', {'student': student})
+    except Student.DoesNotExist:
+        return render(request, 'error.html', {'message': 'Unauthorized access.'})
+
+
+@login_required
+def office_admin_dashboard(request):
+    """Dashboard view for office admins (Teachers)."""
+    if request.user.is_superuser:
+        return redirect('principal_dashboard')  # Redirect to principal if a superuser
+
+    try:
+        office_admin = Teacher.objects.get(user=request.user)  # Assuming Teacher is for office admins
+        return render(request, 'dashboard_office_admin.html', {'office_admin': office_admin})
+    except Teacher.DoesNotExist:
+        return render(request, 'error.html', {'message': 'Unauthorized access.'})
+
+@login_required
+def principal_dashboard(request):
+    """Dashboard view for the principal."""
+    if request.user.is_superuser:
+        return render(request, 'dashboard_principal.html')
+    else:
+        return render(request, 'error.html', {'message': 'Unauthorized access.'})
+    
+@login_required
+def index(request):
+    """Redirect users to their respective dashboards after login."""
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('principal_dashboard')
+        else:
+            try:
+                if Student.objects.filter(user=request.user).exists():
+                    return redirect('student_dashboard')
+                elif Teacher.objects.filter(user=request.user).exists():  # Office Admin Check
+                    return redirect('office_admin_dashboard')
+                else:
+                    return render(request, 'error.html', {'message': 'Unauthorized access.'})
+            except:
+                return render(request, 'error.html', {'message': 'Unauthorized access.'})
+    else:
+        return redirect('login')
+
 
 
 def manage_department(request):

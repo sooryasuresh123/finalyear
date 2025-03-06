@@ -1,5 +1,9 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from .models import Department,Program,Student,Category,Caste, Religion, Quota,Scholarship,Reason, TransferCertificate,ProgramLevel,Role,ScholarshipType,Board,Pathway,DocType
+=======
+from .models import Department,Program,Student,Category,Caste, Religion, Quota,Scholarship,Reason, TransferCertificate,ProgramLevel,Role,ScholarshipType,Board,Pathway,Teacher
+>>>>>>> d91fe44 (upto dashboard)
 
 # Register your models here.
 admin.site.register(Department)
@@ -17,8 +21,13 @@ admin.site.register(Role)
 admin.site.register(Scholarship)
 admin.site.register(ScholarshipType)
 admin.site.register(Board)
+<<<<<<< HEAD
 admin.site.register(DocType)
+=======
+admin.site.register(Teacher)
+>>>>>>> d91fe44 (upto dashboard)
 admin.site.register(Pathway)
+
 
 
 
